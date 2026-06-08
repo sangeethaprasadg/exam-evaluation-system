@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 
 const studentSchema = new mongoose.Schema({
+    rollNumber: {
+        type: String,
+        required: true,
+        unique: true
+    },
+
     studentName: {
         type: String,
         required: true
@@ -11,8 +17,14 @@ const studentSchema = new mongoose.Schema({
         required: true
     },
 
-    mentorName: {
+    email: {
         type: String,
+        required: true
+    },
+
+    mentorId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Mentor",
         required: true
     },
 

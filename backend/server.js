@@ -2,6 +2,12 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const studentRoutes = require("./routes/studentRoutes");
+const mentorRoutes = require("./routes/mentorRoutes");
+const webhookRoutes = require("./routes/webhookRoutes");
+const submissionRoutes = require("./routes/submissionRoutes");
+
+
+
 
 dotenv.config();
 
@@ -12,8 +18,15 @@ const app = express();
 // Middleware
 app.use(express.json());
 
+
 // Routes
 app.use("/", studentRoutes);
+app.use("/", mentorRoutes);
+app.use("/", webhookRoutes);
+app.use("/", submissionRoutes);
+
+
+
 
 app.get("/", (req, res) => {
     res.send("Exam Evaluation System Server Running");
