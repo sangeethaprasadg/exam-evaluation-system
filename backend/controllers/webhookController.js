@@ -4,7 +4,18 @@ const Submission = require("../models/Submission");
 const receiveSubmission = async (req, res) => {
     try {
 
-      const { rollNumber, examName, examMode, answerSheetUrl } = req.body;
+    //   const { rollNumber, examName, examMode, answerSheetUrl } = req.body;
+
+
+      const {
+    rollNumber,
+    examName,
+    examMode,
+    answerSheetUrl,
+    studentName,
+    mentorName,
+    studentEmail
+} = req.body;
 
         // Find Student
 const student = await Student.findOne({ rollNumber });

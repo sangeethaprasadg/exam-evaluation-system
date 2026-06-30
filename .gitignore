@@ -1,1 +1,6 @@
 .DS_Store
+.vite
+.env
+.env.local
+node_modules/
+dist/

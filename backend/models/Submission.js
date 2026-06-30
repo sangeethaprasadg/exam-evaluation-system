@@ -17,10 +17,16 @@ const submissionSchema = new mongoose.Schema({
     //     type: Number,
     //     required: true
     // },
-    examName: {
-    type: String,
+    // examName: {
+    // type: String,
+    // required: true
+    // }
+    // ,
+    examId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Exam",
     required: true
-    },
+},
 
     examMode: {
     type: String,
