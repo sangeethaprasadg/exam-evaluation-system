@@ -5,6 +5,8 @@ const studentRoutes = require("./routes/studentRoutes");
 const mentorRoutes = require("./routes/mentorRoutes");
 const webhookRoutes = require("./routes/webhookRoutes");
 const submissionRoutes = require("./routes/submissionRoutes");
+const authRoutes = require("./routes/authRoutes");
+const cors = require("cors");
 
 
 
@@ -15,8 +17,12 @@ connectDB();
 
 const app = express();
 
+
+
 // Middleware
+app.use(cors());
 app.use(express.json());
+
 
 
 // Routes
@@ -24,6 +30,8 @@ app.use("/", studentRoutes);
 app.use("/", mentorRoutes);
 app.use("/", webhookRoutes);
 app.use("/", submissionRoutes);
+
+app.use("/api/auth", authRoutes);
 
 
 

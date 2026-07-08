@@ -4,3 +4,4 @@
 .env.local
 node_modules/
 dist/
+backend/config/firebase-service-account.json

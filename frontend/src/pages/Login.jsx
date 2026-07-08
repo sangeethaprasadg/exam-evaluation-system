@@ -1,8 +1,31 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/AuthContext";
 import logo from "../assets/logo.svg";
+import { loginWithGoogle } from "../auth/authService";
+
+
+
 
 function Login() {
+
   const navigate = useNavigate();
+  const { setMentor } = useAuth();
+
+  const handleGoogleLogin = async () => {
+  const response = await loginWithGoogle();
+
+ if (response.success) {
+
+  setMentor(response.mentor);
+
+  navigate("/dashboard");
+
+} else {
+
+  alert(response.error);
+
+}
+};
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -26,7 +49,8 @@ function Login() {
         </p>
 
         <button
-          onClick={() => navigate("/dashboard")}
+        //   onClick={() => navigate("/dashboard")}
+             onClick={handleGoogleLogin}
           className="w-full border rounded-xl py-4 flex items-center justify-center gap-3 hover:bg-gray-100 transition"
         >
           <img

@@ -1,73 +1,13 @@
-
-// //added in the another folder the header and logo
-
-// import Header from "../components/Header";
-// import ModuleCard from "../components/ModuleCard";
-
-// function MentorDashboard() {
-//   const modules = [
-//     "Student Management",
-//     "Exam Management",
-//     "Paper Submission & Evaluation",
-//     "One-on-One Management",
-//     "Follow-up Management",
-//     "Reports & Analytics",
-//     "Notifications",
-//   ];
-
-//   return (
-//     <div className="min-h-screen bg-gray-50">
-
-//       {/* Header */}
-//      <Header />
-
-//       {/* Welcome */}
-//       <div className="px-8 py-6">
-//         <h2 className="text-3xl font-bold text-gray-800">
-//           Welcome Back 👋
-//         </h2>
-
-//         <p className="text-gray-500 mt-1">
-//           Lead IAS Exam & Mentorship Portal
-//         </p>
-//       </div>
-
-//       {/* Module Cards */}
-//       <div className="grid grid-cols-2 gap-6 px-8 pb-8">
-
-//       {modules.map((module) => (
-//   <ModuleCard
-//     key={module}
-//     title={module}
-//   />
-// ))}
-
-//       </div>
-
-//     </div>
-//   );
-// }
-
-// export default MentorDashboard;
+import { useAuth } from "../auth/AuthContext";
 
 
-// function MentorDashboard() {
-//   return (
-//     <div>
-//       <h1 className="text-3xl font-bold">
-//         Dashboard
-//       </h1>
-
-//       <p className="mt-2 text-gray-500">
-//         Welcome to Lead IAS Mentor Portal
-//       </p>
-//     </div>
-//   );
-// }
-
-// export default MentorDashboard;
 
 function MentorDashboard() {
+
+
+  const { mentor } = useAuth();
+
+console.log(mentor);
   const stats = [
     {
       title: "Assigned Students",
