@@ -11,21 +11,38 @@ function Login() {
   const navigate = useNavigate();
   const { setMentor } = useAuth();
 
-  const handleGoogleLogin = async () => {
+const handleGoogleLogin = async () => {
+  console.log("Google button clicked");
+
   const response = await loginWithGoogle();
 
- if (response.success) {
+  console.log("Login Response:", response);
 
-  setMentor(response.mentor);
+  if (response.success) {
+    console.log("Firebase User:", response.user);
+    console.log("Mentor:", response.mentor);
+    console.log("Role:", response.mentor.role);
 
-  navigate("/dashboard");
+    setMentor(response.mentor);
 
-} else {
+    const role = response.mentor.role;
 
-  alert(response.error);
-
-}
+    if (role === "mentor") {
+      navigate("/mentor/dashboard");
+    } else if (role === "admin") {
+      navigate("/admin/dashboard");
+    } else if (role === "superadmin") {
+      navigate("/superadmin/dashboard");
+    }
+  } else {
+    alert(response.error);
+  }
 };
+
+
+
+
+
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">

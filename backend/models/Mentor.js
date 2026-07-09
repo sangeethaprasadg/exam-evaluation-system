@@ -1,28 +1,45 @@
 const mongoose = require("mongoose");
 
-const mentorSchema = new mongoose.Schema({
+const mentorSchema = new mongoose.Schema(
+  {
     mentorName: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
+      trim: true,
     },
 
     email: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
     },
 
     contactNumber: {
-        type: String,
-        required: true
+      type: String,
+      default: "",
     },
 
     telegramChatId: {
-        type: String
-    }
+      type: String,
+      default: "",
+    },
 
-}, {
-    timestamps: true
-});
+    role: {
+      type: String,
+      enum: ["mentor", "admin", "superadmin"],
+      default: "mentor",
+    },
+
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 module.exports = mongoose.model("Mentor", mentorSchema);
-

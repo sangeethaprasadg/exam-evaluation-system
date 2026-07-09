@@ -1,7 +1,14 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
+
+
+// import Dashboard from "./pages/Dashboard";
+import MentorDashboard from "./pages/mentor/Dashboard";
+import AdminDashboard from "./pages/admin/Dashboard";
+import SuperAdminDashboard from "./pages/superadmin/Dashboard";
+
+
 import Reports from "./pages/Reports";
 import Notifications from "./pages/Notifications";
 
@@ -30,7 +37,31 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route path="/dashboard" element={<Dashboard />} />
+        
+{/* <Route path="/mentor/dashboard" element={<Dashboard />} />
+
+<Route path="/admin/dashboard" element={<Dashboard />} />
+
+<Route path="/superadmin/dashboard" element={<Dashboard />} /> */}
+
+
+<Route
+  path="/mentor/dashboard"
+  element={<MentorDashboard />}
+/>
+
+<Route
+  path="/admin/dashboard"
+  element={<AdminDashboard />}
+/>
+
+<Route
+  path="/superadmin/dashboard"
+  element={<SuperAdminDashboard />}
+/>
+
+
+
           <Route path="/students" element={<Students />} />
           <Route path="/exams" element={<Exams />} />
           <Route path="/evaluations" element={<Evaluation />} />
