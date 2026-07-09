@@ -9,6 +9,10 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import SuperAdminDashboard from "./pages/superadmin/Dashboard";
 
 
+import Users from "./pages/superadmin/Users";
+import Courses from "./pages/superadmin/Courses";
+
+
 import Reports from "./pages/Reports";
 import Notifications from "./pages/Notifications";
 
@@ -59,6 +63,11 @@ function App() {
   path="/superadmin/dashboard"
   element={<SuperAdminDashboard />}
 />
+
+
+<Route path="/users" element={<Users />} />
+
+<Route path="/courses" element={<Courses />} />
 
 
 
