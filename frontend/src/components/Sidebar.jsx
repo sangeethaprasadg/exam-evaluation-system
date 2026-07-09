@@ -12,9 +12,11 @@ import {
 } from "lucide-react";
 
 import logo from "../assets/logo.svg";
+import { useAuth } from "../auth/AuthContext";
 
-const menus = [
-  { name: "Dashboard", path: "/", icon: LayoutDashboard },
+
+const mentorMenus = [
+  { name: "Dashboard", path: "/mentor/dashboard", icon: LayoutDashboard },
   { name: "Students", path: "/students", icon: GraduationCap },
   { name: "Exams", path: "/exams", icon: BookOpen },
   { name: "Evaluations", path: "/evaluations", icon: FileText },
@@ -24,7 +26,41 @@ const menus = [
   { name: "Notifications", path: "/notifications", icon: Bell },
 ];
 
+
+const adminMenus = [
+  { name: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
+  { name: "Students", path: "/students", icon: GraduationCap },
+  { name: "Exams", path: "/exams", icon: BookOpen },
+  { name: "Reports", path: "/reports", icon: BarChart3 },
+  { name: "Notifications", path: "/notifications", icon: Bell },
+];
+
+
+
+const superAdminMenus = [
+  { name: "Dashboard", path: "/superadmin/dashboard", icon: LayoutDashboard },
+  { name: "Users", path: "/users", icon: Users },
+  { name: "Courses", path: "/courses", icon: BookOpen },
+  { name: "Reports", path: "/reports", icon: BarChart3 },
+];
+
+
+
 function Sidebar() {
+
+  const { mentor } = useAuth();
+  let menus = mentorMenus;
+
+if (mentor?.role === "admin") {
+  menus = adminMenus;
+}
+
+if (mentor?.role === "superadmin") {
+  menus = superAdminMenus;
+}
+
+
+  
   return (
     <aside className="w-64 min-h-screen bg-white shadow-lg flex flex-col">
 
@@ -77,19 +113,21 @@ function Sidebar() {
           <div className="bg-gray-50 rounded-xl p-4 flex items-center gap-3 w-full">
 
           <div className="w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-lg">
-            SP
+          {mentor?.mentorName?.charAt(0) || "U"}
           </div>
 
           <div>
-           
-              <h3 className="text-sm font-semibold text-gray-800">
-              Sangeetha Prasad
-            </h3>
 
-            <p className="text-sm text-gray-500">
-              Mentor
-            </p>
-          </div>
+  <h3 className="text-sm font-semibold text-gray-800">
+    {mentor?.mentorName}
+  </h3>
+
+  <p className="text-sm text-gray-500 capitalize">
+    {mentor?.role}
+  </p>
+
+</div>
+
 
         </div>
 
