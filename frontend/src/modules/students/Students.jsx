@@ -1,30 +1,55 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import StudentStats from "./components/StudentStats";
 import StudentFilters from "./components/StudentFilters";
-import StudentTable from "./components/StudentTable";
+import StudentTable from "./components/MentorStudentTable";
 import StudentSummaryModal from "./StudentSummaryModal";
 
-import { students } from "./studentData";
+import { useAuth } from "../../auth/AuthContext";
 
 function Students() {
+
+const { mentor } = useAuth();
+
+const [students, setStudents] = useState([]);
+
   const [selectedStudent, setSelectedStudent] = useState(null);
 
   const [search, setSearch] = useState("");
   const [batch, setBatch] = useState("All Batches");
   const [program, setProgram] = useState("All Programs");
 
+
+useEffect(() => {
+
+  if (!mentor) return;
+
+  
+    console.log("Mentor ID:", mentor._id);
+  
+
+  fetch(
+    `http://localhost:3000/api/students/mentor/${mentor._id}`
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      setStudents(data.students);
+    })
+    .catch((err) => console.log(err));
+
+}, [mentor]);
+
+
+console.log("Students State:", students);
+
+
   const filteredStudents = students.filter((student) => {
     const matchesSearch =
-      student.name.toLowerCase().includes(search.toLowerCase()) ||
-      student.rollNo.includes(search);
+    student.studentName.toLowerCase().includes(search.toLowerCase()) ||
+    student.rollNumber.includes(search);
 
-    const matchesBatch =
-      batch === "All Batches" || student.batch === batch;
-
-    const matchesProgram =
-      program === "All Programs" ||
-      student.program === program;
+   const matchesBatch = true;
+const matchesProgram = true;
 
     return (
       matchesSearch &&
@@ -33,6 +58,8 @@ function Students() {
     );
   });
 
+
+  console.log("Filtered:", filteredStudents);
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
 
@@ -52,18 +79,18 @@ function Students() {
 
       {/* Statistics */}
 
-      <StudentStats />
+      {/* <StudentStats /> */}
 
       {/* Filters */}
 
-      <StudentFilters
+      {/* <StudentFilters
         search={search}
         setSearch={setSearch}
         batch={batch}
         setBatch={setBatch}
         program={program}
         setProgram={setProgram}
-      />
+      /> */}
 
       {/* Table */}
 
@@ -80,6 +107,9 @@ function Students() {
       />
 
     </div>
+
+
+
   );
 }
 

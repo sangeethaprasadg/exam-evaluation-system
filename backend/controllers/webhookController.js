@@ -1,70 +1,69 @@
 const Student = require("../models/Student");
 const Submission = require("../models/Submission");
+const Exam = require("../models/Exam");
 
 const receiveSubmission = async (req, res) => {
     try {
 
-    //   const { rollNumber, examName, examMode, answerSheetUrl } = req.body;
+        const {
+            rollNumber,
+            examName
+        } = req.body;
 
-
-      const {
-    rollNumber,
-    examName,
-    examMode,
-    answerSheetUrl,
-    studentName,
-    mentorName,
-    studentEmail
-} = req.body;
+        // Validate required fields
+        if (!rollNumber || !examName) {
+            return res.status(400).json({
+                success: false,
+                message: "Roll Number and Exam Name are required"
+            });
+        }
 
         // Find Student
-const student = await Student.findOne({ rollNumber });
+        const student = await Student.findOne({ rollNumber });
 
-if (!student) {
-    return res.status(404).json({
-        success: false,
-        message: "Student not found"
-    });
-}
+        if (!student) {
+            return res.status(404).json({
+                success: false,
+                message: "Student not found"
+            });
+        }
 
-// Validation for Online Exam
-if (examMode === "Online" && !answerSheetUrl) {
-    return res.status(400).json({
-        success: false,
-        message: "Answer sheet URL is required for Online exams"
-    });
-}
+        // Find Exam
+        const exam = await Exam.findOne({ examName });
 
+        if (!exam) {
+            return res.status(404).json({
+                success: false,
+                message: "Exam not found"
+            });
+        }
 
-       // Check Duplicate Submission
+        // Check Duplicate Submission
+        const existingSubmission = await Submission.findOne({
+            studentId: student._id,
+            examId: exam._id
+        });
 
-// const existingSubmission = await Submission.findOne({
-//     studentId: student._id,
-//     examNumber
-// });
+        if (existingSubmission) {
+            return res.status(400).json({
+                success: false,
+                message: "Submission already exists"
+            });
+        }
 
-// if (existingSubmission) {
-//     return res.status(400).json({
-//         success: false,
-//         message: "Submission already exists"
-//     });
-// }
+        // Create Submission
+        const submission = await Submission.create({
+            studentId: student._id,
+            mentorId: student.mentorId,
+            examId: exam._id
+        });
 
-// Create Submission
-const submission = await Submission.create({
-    studentId: student._id,
-    mentorId: student.mentorId,
-    examName,
-    examMode,
-    answerSheetUrl,
-    status: "Submitted"
-});
+        res.status(201).json({
+            success: true,
+            message: "Submission created successfully",
+            data: submission
+        });
 
-res.status(201).json({
-    success: true,
-    message: "Submission created successfully",
-    data: submission
-});
     } catch (error) {
         res.status(500).json({
             success: false,

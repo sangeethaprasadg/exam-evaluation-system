@@ -1,15 +1,41 @@
 const Submission = require("../models/Submission");
 
+// Get all submissions assigned to a mentor
+const getMentorSubmissions = async (req, res) => {
+    try {
+
+        const { mentorId } = req.params;
+
+        const submissions = await Submission.find({ mentorId })
+            .populate("studentId", "studentName rollNumber")
+            .populate("examId", "examName examMode")
+            .sort({ createdAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            count: submissions.length,
+            data: submissions
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+
+// Get single submission
 const getSubmissionById = async (req, res) => {
     try {
 
         const { id } = req.params;
 
         const submission = await Submission.findById(id)
-            .populate(
-                "studentId",
-                "studentName rollNumber"
-            );
+            .populate("studentId", "studentName rollNumber")
+            .populate("mentorId", "mentorName")
+            .populate("examId");
 
         if (!submission) {
             return res.status(404).json({
@@ -18,22 +44,23 @@ const getSubmissionById = async (req, res) => {
             });
         }
 
-
-
         res.status(200).json({
             success: true,
             data: {
                 submissionId: submission._id,
                 studentName: submission.studentId.studentName,
                 rollNumber: submission.studentId.rollNumber,
-                examName: submission.examName,
-                examMode: submission.examMode,
+                mentorName: submission.mentorId.mentorName,
+
+                examName: submission.examId.examName,
+                examMode: submission.examId.examMode,
+                totalMarks: submission.examId.totalMarks,
+
                 answerSheetUrl: submission.answerSheetUrl,
-                attendance: submission.attendance,
+
                 status: submission.status,
-                marks: submission.marks,
-                feedback: submission.feedback,
-                correctedPaperUrl: submission.correctedPaperUrl
+
+                submittedAt: submission.submittedAt
             }
         });
 
@@ -45,51 +72,7 @@ const getSubmissionById = async (req, res) => {
     }
 };
 
-
-const evaluateSubmission = async (req, res) => {
-    try {
-
-        const { id } = req.params;
-
-        const {
-            attendance,
-            marks,
-            feedback,
-            correctedPaperUrl
-        } = req.body;
-
-        const submission = await Submission.findById(id);
-
-        if (!submission) {
-            return res.status(404).json({
-                success: false,
-                message: "Submission not found"
-            });
-        }
-
-        submission.attendance = attendance;
-        submission.marks = marks;
-        submission.feedback = feedback;
-        submission.correctedPaperUrl = correctedPaperUrl;
-        submission.status = "Evaluated";
-
-        await submission.save();
-
-        res.status(200).json({
-            success: true,
-            message: "Submission evaluated successfully",
-            data: submission
-        });
-
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
-    }
-};
-
 module.exports = {
-    getSubmissionById,
-    evaluateSubmission
+    getMentorSubmissions,
+    getSubmissionById
 };

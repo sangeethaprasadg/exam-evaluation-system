@@ -2,14 +2,12 @@ const express = require("express");
 const router = express.Router();
 
 const {
-    getSubmissionById,
-    evaluateSubmission
+    getMentorSubmissions,
+    getSubmissionById
 } = require("../controllers/submissionController");
 
-router.get("/submissions/:id", getSubmissionById);
-router.patch(
-    "/submissions/:id/evaluate",
-    evaluateSubmission
-);
+router.get("/my/:mentorId", getMentorSubmissions);
+
+router.get("/:id", getSubmissionById);
 
 module.exports = router;

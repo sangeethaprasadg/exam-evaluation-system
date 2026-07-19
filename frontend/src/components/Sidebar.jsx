@@ -13,54 +13,89 @@ import {
 
 import logo from "../assets/logo.svg";
 import { useAuth } from "../auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 
+
+
+// -------------------- Mentor --------------------
 
 const mentorMenus = [
   { name: "Dashboard", path: "/mentor/dashboard", icon: LayoutDashboard },
+
   { name: "Students", path: "/students", icon: GraduationCap },
+
   { name: "Exams", path: "/exams", icon: BookOpen },
+
   { name: "Evaluations", path: "/evaluations", icon: FileText },
+
   { name: "One-on-One", path: "/one-on-one", icon: Users },
+
   { name: "Follow Ups", path: "/followups", icon: ClipboardList },
+
   { name: "Reports", path: "/reports", icon: BarChart3 },
-  { name: "Notifications", path: "/notifications", icon: Bell },
 ];
 
+// -------------------- Admin --------------------
 
 const adminMenus = [
   { name: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
-  { name: "Students", path: "/students", icon: GraduationCap },
-  { name: "Exams", path: "/exams", icon: BookOpen },
+
+  { name: "Users", path: "/users", icon: Users },
+
+  {
+    name: "Students",
+    path: "/student-management",
+    icon: GraduationCap,
+  },
+
+  { name: "Courses", path: "/courses", icon: BookOpen },
+
   { name: "Reports", path: "/reports", icon: BarChart3 },
-  { name: "Notifications", path: "/notifications", icon: Bell },
 ];
 
-
+// -------------------- Super Admin --------------------
 
 const superAdminMenus = [
-  { name: "Dashboard", path: "/superadmin/dashboard", icon: LayoutDashboard },
+  {
+    name: "Dashboard",
+    path: "/superadmin/dashboard",
+    icon: LayoutDashboard,
+  },
+
   { name: "Users", path: "/users", icon: Users },
+
+  {
+    name: "Students",
+    path: "/student-management",
+    icon: GraduationCap,
+  },
+
   { name: "Courses", path: "/courses", icon: BookOpen },
+
   { name: "Reports", path: "/reports", icon: BarChart3 },
 ];
-
-
 
 function Sidebar() {
 
-  const { mentor } = useAuth();
+   const { mentor, logout } = useAuth();
+
+   const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
+
   let menus = mentorMenus;
 
-if (mentor?.role === "admin") {
-  menus = adminMenus;
-}
+  if (mentor?.role === "admin") {
+    menus = adminMenus;
+  }
 
-if (mentor?.role === "superadmin") {
-  menus = superAdminMenus;
-}
+  if (mentor?.role === "superadmin") {
+    menus = superAdminMenus;
+  }
 
-
-  
   return (
     <aside className="w-64 min-h-screen bg-white shadow-lg flex flex-col">
 
@@ -73,17 +108,16 @@ if (mentor?.role === "superadmin") {
         />
 
         <h2 className="text-lg font-bold text-gray-800 mt-3">
-          Mentor Portal
+          {mentor?.role === "superadmin"
+            ? "Super Admin Portal"
+            : mentor?.role === "admin"
+            ? "Admin Portal"
+            : "Mentor Portal"}
         </h2>
-
-        {/* <p className="text-sm text-gray-500">
-          Lead IAS
-        </p> */}
       </div>
 
       {/* Menu */}
       <nav className="px-4 mt-5">
-
         {menus.map((menu) => {
           const Icon = menu.icon;
 
@@ -108,42 +142,34 @@ if (mentor?.role === "superadmin") {
 
       {/* Profile */}
       <div className="px-5 mt-8">
-
-      
-          <div className="bg-gray-50 rounded-xl p-4 flex items-center gap-3 w-full">
+        <div className="bg-gray-50 rounded-xl p-4 flex items-center gap-3">
 
           <div className="w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-lg">
-          {mentor?.mentorName?.charAt(0) || "U"}
+            {mentor?.mentorName?.charAt(0) || "U"}
           </div>
 
           <div>
+            <h3 className="text-sm font-semibold text-gray-800">
+              {mentor?.mentorName}
+            </h3>
 
-  <h3 className="text-sm font-semibold text-gray-800">
-    {mentor?.mentorName}
-  </h3>
-
-  <p className="text-sm text-gray-500 capitalize">
-    {mentor?.role}
-  </p>
-
-</div>
-
+            <p className="text-sm text-gray-500 capitalize">
+              {mentor?.role}
+            </p>
+          </div>
 
         </div>
-
       </div>
 
       {/* Logout */}
       <div className="px-5 mt-4">
-
-        <button className="flex items-center gap-2 text-red-500 hover:text-red-700 font-medium">
-
-          <LogOut size={18} />
-
-          Logout
-
-        </button>
-
+    <button
+  onClick={handleLogout}
+  className="flex items-center gap-2 text-red-500 hover:text-red-700 font-medium"
+>
+  <LogOut size={18} />
+  Logout
+</button>
       </div>
 
     </aside>

@@ -7,6 +7,8 @@ const webhookRoutes = require("./routes/webhookRoutes");
 const submissionRoutes = require("./routes/submissionRoutes");
 const authRoutes = require("./routes/authRoutes");
 const cors = require("cors");
+const userRoutes = require("./routes/userRoutes");
+const evaluationRoutes = require("./routes/evaluationRoutes");
 
 
 
@@ -22,14 +24,19 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use("/api/users", userRoutes);
+
+
 
 
 
 // Routes
-app.use("/", studentRoutes);
-app.use("/", mentorRoutes);
-app.use("/", webhookRoutes);
-app.use("/", submissionRoutes);
+app.use("/api", studentRoutes);
+app.use("/api", mentorRoutes);
+app.use("/api", webhookRoutes);
+app.use("/api", submissionRoutes);
+app.use("/api/evaluations", evaluationRoutes);
+
 
 app.use("/api/auth", authRoutes);
 

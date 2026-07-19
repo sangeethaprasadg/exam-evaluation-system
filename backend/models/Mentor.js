@@ -36,7 +36,17 @@ const mentorSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    mentorCode: {
+    type: Number,
+    default: null,
+},
+
+course: {
+    type: String,
+    default: "",
+},
   },
+  
   {
     timestamps: true,
   }

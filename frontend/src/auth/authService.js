@@ -7,6 +7,11 @@ import { auth, googleProvider } from "../firebase/firebase";
 // Google Sign In
 export const loginWithGoogle = async () => {
   try {
+
+
+    googleProvider.setCustomParameters({
+  prompt: "select_account",
+});
     // Firebase Login
     const result = await signInWithPopup(auth, googleProvider);
 

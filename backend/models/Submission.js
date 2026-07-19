@@ -1,70 +1,44 @@
 const mongoose = require("mongoose");
 
-const submissionSchema = new mongoose.Schema({
+const submissionSchema = new mongoose.Schema(
+  {
     studentId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Student",
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Student",
+      required: true,
     },
 
     mentorId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Mentor",
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Mentor",
+      required: true,
     },
 
-    // examNumber: {
-    //     type: Number,
-    //     required: true
-    // },
-    // examName: {
-    // type: String,
-    // required: true
-    // }
-    // ,
     examId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Exam",
-    required: true
-},
-
-    examMode: {
-    type: String,
-    enum: ["Online", "Offline"],
-    required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Exam",
+      required: true,
     },
 
     answerSheetUrl: {
-        type: String,
-        // required: true
+      type: String,
+      default: "",
     },
 
-    attendance: {
-        type: Boolean,
-        default: false
-    },
-
-    correctedPaperUrl: {
-        type: String
-    },
-
-    feedback: {
-        type: String
-    },
-
-    marks: {
-        type: Number
-    },
-
-    
     status: {
-    type: String,
-    enum: ["Submitted", "Evaluated"],
-    default: "Submitted"
-}
+      type: String,
+      enum: ["Submitted", "In Review", "Evaluated"],
+      default: "Submitted",
+    },
 
-}, {
-    timestamps: true
-});
+    submittedAt: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 module.exports = mongoose.model("Submission", submissionSchema);
