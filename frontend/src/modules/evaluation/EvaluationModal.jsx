@@ -1,5 +1,6 @@
 import { X, ExternalLink } from "lucide-react";
 import { useState } from "react";
+import axios from "axios";
 
 function EvaluationModal({ evaluation, onClose }) {
   if (!evaluation) return null;
@@ -11,6 +12,10 @@ function EvaluationModal({ evaluation, onClose }) {
   const [mentorRemark, setMentorRemark] = useState(
     evaluation.mentorRemark || ""
   );
+
+  const [correctedPaper, setCorrectedPaper] = useState(null);
+
+
 
   const [ratings, setRatings] = useState({
     contentCompetency:
@@ -32,6 +37,46 @@ function EvaluationModal({ evaluation, onClose }) {
       [field]: value,
     }));
   };
+
+
+
+
+const handleSubmit = async () => {
+  try {
+    const formData = new FormData();
+
+    formData.append("submissionId", evaluation.id);
+    formData.append("marks", marks);
+    formData.append("mentorRemark", mentorRemark);
+    formData.append("ratings", JSON.stringify(ratings));
+
+    if (correctedPaper) {
+      formData.append("correctedPaper", correctedPaper);
+    }
+
+    const response = await axios.post(
+      "http://localhost:3000/api/submissions/evaluate",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    console.log(response.data);
+
+    alert("Evaluation submitted successfully!");
+    onClose();
+
+  } catch (error) {
+    console.error(error);
+    alert("Failed to submit evaluation.");
+  }
+};
+
+
+
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
@@ -393,33 +438,29 @@ function EvaluationModal({ evaluation, onClose }) {
           </div>
 
 
-                    {/* Corrected Paper Upload */}
+         
 
-          <div className="bg-white border rounded-xl p-6 mb-8">
+          {/* Corrected Paper Upload */}
 
-            <h3 className="text-xl font-semibold mb-4">
-              Upload Corrected Paper
-            </h3>
+{evaluation.submissionType === "Online" && (
+  <div className="bg-white border rounded-xl p-6 mb-8">
+    <h3 className="text-xl font-semibold mb-4">
+      Upload Corrected Paper
+    </h3>
 
-            <p className="text-gray-500 mb-5">
-              Upload the corrected answer sheet using the Google Form below.
-            </p>
+    <input
+      type="file"
+      accept=".pdf"
+      onChange={(e) => setCorrectedPaper(e.target.files[0])}
+      className="w-full border rounded-lg p-3"
+    />
+  </div>
+)}
 
-            <div className="border rounded-xl overflow-hidden">
+         
 
-              <iframe
-                title="Corrected Paper Upload"
-                src="https://docs.google.com/forms/d/e/YOUR_GOOGLE_FORM_ID/viewform?embedded=true"
-                width="100%"
-                height="650"
-                frameBorder="0"
-              >
-                Loading...
-              </iframe>
 
-            </div>
-
-          </div>
+         
 
           {/* Footer Buttons */}
 
@@ -431,11 +472,14 @@ function EvaluationModal({ evaluation, onClose }) {
               Save Draft
             </button>
 
-            <button
-              className="px-6 py-3 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition"
-            >
-              Submit Evaluation
-            </button>
+        
+
+<button
+  onClick={handleSubmit}
+  className="px-6 py-3 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition"
+>
+  Submit Evaluation
+</button>
 
           </div>
 

@@ -12,6 +12,7 @@ import SuperAdminDashboard from "./pages/superadmin/Dashboard";
 import Users from "./pages/superadmin/Users";
 import Courses from "./pages/superadmin/Courses";
 import StudentManagement from "./pages/superadmin/StudentManagement";
+import Submissions from "./pages/superadmin/Submissions";
 
 import Reports from "./pages/Reports";
 import Notifications from "./pages/Notifications";
@@ -65,7 +66,7 @@ function App() {
 />
 
 
-//super admin 
+{/* Super Admin */}
 
 <Route path="/users" element={<Users />} />
 
@@ -76,7 +77,10 @@ function App() {
   element={<StudentManagement />}
 />
 
-
+<Route
+  path="/superadmin/submissions"
+  element={<Submissions />}
+/>
 
           <Route path="/students" element={<Students />} />
           <Route path="/exams" element={<Exams />} />

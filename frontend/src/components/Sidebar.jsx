@@ -62,7 +62,11 @@ const superAdminMenus = [
     icon: LayoutDashboard,
   },
 
-  { name: "Users", path: "/users", icon: Users },
+  {
+    name: "Users",
+    path: "/users",
+    icon: Users,
+  },
 
   {
     name: "Students",
@@ -70,9 +74,23 @@ const superAdminMenus = [
     icon: GraduationCap,
   },
 
-  { name: "Courses", path: "/courses", icon: BookOpen },
+  {
+    name: "Submissions",
+    path: "/superadmin/submissions",
+    icon: FileText,
+  },
 
-  { name: "Reports", path: "/reports", icon: BarChart3 },
+  {
+    name: "Courses",
+    path: "/courses",
+    icon: BookOpen,
+  },
+
+  {
+    name: "Reports",
+    path: "/reports",
+    icon: BarChart3,
+  },
 ];
 
 function Sidebar() {

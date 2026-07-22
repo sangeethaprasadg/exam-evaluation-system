@@ -1,13 +1,27 @@
 const express = require("express");
 const router = express.Router();
+const uploadPdf = require("../middleware/uploadPdf");
+
+
+
 
 const {
     getMentorSubmissions,
-    getSubmissionById
+    getSubmissionById,
+    getAllSubmissions,
+    evaluateSubmission,
 } = require("../controllers/submissionController");
 
-router.get("/my/:mentorId", getMentorSubmissions);
+router.get("/submissions/my/:mentorId", getMentorSubmissions);
 
-router.get("/:id", getSubmissionById);
+router.get("/submissions", getAllSubmissions);
+
+router.get("/submissions/:id", getSubmissionById);
+
+router.post(
+    "/submissions/evaluate",
+    uploadPdf.single("correctedPaper"),
+    evaluateSubmission
+);
 
 module.exports = router;

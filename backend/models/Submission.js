@@ -14,16 +14,41 @@ const submissionSchema = new mongoose.Schema(
       required: true,
     },
 
-    examId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Exam",
+    examName: {
+      type: String,
+      required: true,
+    },
+
+    examMode: {
+      type: String,
+      enum: ["Online", "Offline"],
       required: true,
     },
 
     answerSheetUrl: {
       type: String,
-      default: "",
+      default:null,
     },
+
+    correctedPaperUrl: {
+  type: String,
+  default: null,
+},
+
+marks: {
+  type: Number,
+  default: null,
+},
+
+feedback: {
+  type: String,
+  default: "",
+},
+
+ratings: {
+  type: mongoose.Schema.Types.Mixed,
+  default: {},
+},
 
     status: {
       type: String,

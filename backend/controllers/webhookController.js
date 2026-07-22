@@ -1,20 +1,25 @@
 const Student = require("../models/Student");
 const Submission = require("../models/Submission");
-const Exam = require("../models/Exam");
 
 const receiveSubmission = async (req, res) => {
     try {
-
         const {
             rollNumber,
-            examName
+            studentName,
+            answerSheetUrl,
+            mentorName,
+            examName,
+            examMode
         } = req.body;
 
+
+     
+
         // Validate required fields
-        if (!rollNumber || !examName) {
+        if (!rollNumber || !examName || !examMode) {
             return res.status(400).json({
                 success: false,
-                message: "Roll Number and Exam Name are required"
+                message: "Roll Number, Exam Name and Exam Mode are required"
             });
         }
 
@@ -28,20 +33,10 @@ const receiveSubmission = async (req, res) => {
             });
         }
 
-        // Find Exam
-        const exam = await Exam.findOne({ examName });
-
-        if (!exam) {
-            return res.status(404).json({
-                success: false,
-                message: "Exam not found"
-            });
-        }
-
         // Check Duplicate Submission
         const existingSubmission = await Submission.findOne({
             studentId: student._id,
-            examId: exam._id
+            examName: examName
         });
 
         if (existingSubmission) {
@@ -55,7 +50,10 @@ const receiveSubmission = async (req, res) => {
         const submission = await Submission.create({
             studentId: student._id,
             mentorId: student.mentorId,
-            examId: exam._id
+            examName,
+            examMode,
+            answerSheetUrl,
+            status: "Submitted"
         });
 
         res.status(201).json({
@@ -65,6 +63,8 @@ const receiveSubmission = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("Webhook Error:", error);
+
         res.status(500).json({
             success: false,
             message: error.message

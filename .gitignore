@@ -5,3 +5,4 @@
 node_modules/
 dist/
 backend/config/firebase-service-account.json
+backend/config/service-account.json
